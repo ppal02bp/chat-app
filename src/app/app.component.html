@@ -1,0 +1,11 @@
+<ul>
+  <li *ngFor="let msg of messages | async">
+    <input type="text" #updatetext [value]="msg.text" />
+    <button (click)="updateItem(msg.key, updatetext.value)">Update</button>
+    <button (click)="deleteItem(msg.key)">Delete</button>
+  </li>
+</ul>
+<input type="text" #newitem />
+<button (click)="addItem(newitem.value)">Add</button>
+<button (click)="deleteEverything()">Delete All</button>
+
