@@ -1,11 +1,44 @@
-<ul>
-  <li *ngFor="let msg of messages | async">
-    <input type="text" #updatetext [value]="msg.text" />
-    <button (click)="updateItem(msg.key, updatetext.value)">Update</button>
-    <button (click)="deleteItem(msg.key)">Delete</button>
-  </li>
-</ul>
-<input type="text" #newitem />
-<button (click)="addItem(newitem.value)">Add</button>
-<button (click)="deleteEverything()">Delete All</button>
+<div class="chatbox-holder">
+  <div class="chatbox">
+    <div *ngIf="showTop" class="chatbox-top">
+      <div class="chatbox-avatar">
+      </div>
+      <div class="chat-partner-name">
+        <span class="join-users">
+          <span>Room >> </span>
+          <span *ngFor="let user of users | async">
+            <span>{{user.name}}  </span>
+            <span class="status online"></span>
+          </span>
+        </span>
+        <span *ngIf="currentUserID" id="invite-link"><a href="http://localhost:4200?id={{currentUserID}}&roomId={{currentRoomID}}" target="_blank">Join</a></span>
+      </div>
+    </div>
+    <form [formGroup]="loginForm" *ngIf="showLogin" (ngSubmit)="login()">
+      <div class="chat-input-holder">
+        <input type="text" formControlName="name" class="chat-input" />
+        <input type="submit" value="Login" class="message-send" />
+      </div>
+    </form>
+    <form [formGroup]="chatForm" *ngIf="showChat" (ngSubmit)="send()">
+      <div class="chat-messages">
+        <div *ngFor="let msg of messages | async" class="message-box-holder">
+          <div *ngIf="currentUserID === msg.userID" class="message-box">
+            {{msg.message}}
+          </div>
+          <div *ngIf="currentUserID !== msg.userID" class="message-sender">
+            {{msg.name}}
+          </div>
+          <div *ngIf="currentUserID !== msg.userID" class="message-box message-partner">
+            {{msg.message}}
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-holder">
+        <input type="text" formControlName="message" class="chat-input" id="msg" />
+        <input type="submit" value="Send" class="message-send" />
+      </div>
+    </form>
+  </div>
+</div>
 
